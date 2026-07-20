@@ -1,0 +1,1683 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4efe7" />
+    <title>Chúc mừng tốt nghiệp HCMUE | Gửi đến cô bạn mình mới quen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f4efe7;
+        --paper-2: #fbf8f1;
+        --ink: #151312;
+        --muted: #6b635d;
+        --line: rgba(21, 19, 18, 0.13);
+        --wine: #8b2e2b;
+        --gold: #c5a264;
+        --olive: #71705b;
+        --shadow: 0 24px 70px rgba(33, 27, 23, 0.15);
+        --font-display: "Playfair Display", "Times New Roman", serif;
+        --font-serif: "Cormorant Garamond", Georgia, serif;
+        --font-body: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+        --radius-lg: 34px;
+        --radius-md: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--font-body);
+        background:
+          radial-gradient(
+            circle at 12% 12%,
+            rgba(255, 255, 255, 0.9),
+            transparent 24%
+          ),
+          radial-gradient(
+            circle at 88% 18%,
+            rgba(197, 162, 100, 0.1),
+            transparent 20%
+          ),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.36), transparent 54%),
+          var(--paper);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.16;
+        background-image:
+          radial-gradient(rgba(49, 43, 37, 0.32) 0.7px, transparent 0.7px),
+          radial-gradient(rgba(49, 43, 37, 0.17) 0.55px, transparent 0.55px);
+        background-position:
+          0 0,
+          13px 17px;
+        background-size: 26px 26px;
+        mix-blend-mode: multiply;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+      button {
+        font-family: inherit;
+      }
+      a,
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .progress {
+        position: fixed;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, var(--wine), var(--gold));
+        transform-origin: left center;
+        transform: scaleX(0);
+        z-index: 120;
+      }
+
+      .loader {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 110;
+        background:
+          radial-gradient(
+            circle at 50% 20%,
+            rgba(255, 255, 255, 0.12),
+            transparent 35%
+          ),
+          #121212;
+        color: #fff;
+        transition:
+          opacity 0.85s ease,
+          visibility 0.85s ease;
+      }
+      .loader.hide {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .loader-card {
+        width: min(90vw, 620px);
+        padding: 38px 24px;
+        text-align: center;
+        position: relative;
+      }
+
+      .loader-card::before,
+      .loader-card::after {
+        content: "✦";
+        position: absolute;
+        top: 12px;
+        color: rgba(255, 255, 255, 0.28);
+        font-size: 1.15rem;
+        animation: twinkle 2.8s ease-in-out infinite;
+      }
+      .loader-card::before {
+        left: 10%;
+      }
+      .loader-card::after {
+        right: 10%;
+        animation-delay: 0.6s;
+      }
+
+      .loader-kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        font-size: 0.78rem;
+        color: #bdb6a8;
+        margin-bottom: 20px;
+      }
+
+      .loader-title {
+        font-family: var(--font-display);
+        font-size: clamp(3rem, 8vw, 5.8rem);
+        line-height: 0.95;
+        margin: 0 0 18px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+
+      .loader-title em {
+        display: block;
+        font-style: normal;
+        font-size: 0.5em;
+        font-weight: 500;
+        color: #d4cec2;
+        letter-spacing: 0.02em;
+        margin-top: 12px;
+      }
+
+      .loader-text {
+        max-width: 460px;
+        margin: 0 auto 28px;
+        line-height: 1.7;
+        color: #d0cbc3;
+        font-size: 1rem;
+      }
+
+      .open-btn,
+      .wish-btn,
+      .close-note {
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        padding: 15px 28px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
+        transition:
+          transform 0.25s ease,
+          box-shadow 0.25s ease,
+          background 0.25s ease;
+      }
+
+      .open-btn {
+        background: linear-gradient(135deg, #fff, #eee7dc);
+        color: #141414;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .open-btn::before,
+      .wish-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          115deg,
+          transparent 20%,
+          rgba(255, 255, 255, 0.6) 50%,
+          transparent 80%
+        );
+        transform: translateX(-120%);
+        transition: transform 0.75s ease;
+      }
+      .open-btn:hover::before,
+      .wish-btn:hover::before {
+        transform: translateX(120%);
+      }
+
+      .open-btn:hover,
+      .wish-btn:hover,
+      .close-note:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 36px rgba(0, 0, 0, 0.18);
+      }
+      .open-btn:active,
+      .wish-btn:active,
+      .close-note:active {
+        transform: translateY(1px) scale(0.985);
+      }
+
+      .site {
+        opacity: 0;
+        transition: opacity 0.75s ease;
+        position: relative;
+        z-index: 1;
+      }
+      .site.visible {
+        opacity: 1;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100svh;
+        padding: 40px clamp(18px, 5vw, 72px) 48px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+        gap: clamp(26px, 5vw, 78px);
+        align-items: center;
+        overflow: hidden;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .hero::after {
+        content: "HCMUE · Graduation Day";
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%) rotate(90deg);
+        transform-origin: center;
+        font-family: var(--font-display);
+        letter-spacing: 0.26em;
+        font-size: 0.86rem;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      .brand {
+        position: absolute;
+        top: 26px;
+        left: clamp(18px, 5vw, 72px);
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.95rem;
+      }
+
+      .hero-copy {
+        position: relative;
+        z-index: 2;
+        padding-top: 40px;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--wine);
+      }
+
+      .hero-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(4.2rem, 10vw, 8.8rem);
+        line-height: 0.88;
+        letter-spacing: -0.06em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .hero-title span {
+        display: block;
+      }
+      .hero-title .soft {
+        color: #8b847b;
+        margin-left: 0.58em;
+      }
+
+      .hero-sub {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 18px;
+        max-width: 630px;
+        align-items: start;
+      }
+      .hero-sub .number {
+        font-family: var(--font-display);
+        font-size: 4.5rem;
+        line-height: 0.8;
+        color: var(--gold);
+      }
+      .hero-sub p {
+        margin: 0;
+        font-size: clamp(1rem, 1.7vw, 1.14rem);
+        line-height: 1.9;
+        color: #383430;
+      }
+
+      .hero-quote {
+        margin-top: 26px;
+        max-width: 560px;
+        padding: 18px 20px 18px 22px;
+        border-left: 3px solid rgba(139, 46, 43, 0.55);
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(4px);
+        color: #47413c;
+        line-height: 1.8;
+        box-shadow: 0 14px 30px rgba(49, 40, 34, 0.06);
+      }
+
+      .hero-photo {
+        position: relative;
+        min-height: 620px;
+        height: min(78vh, 860px);
+        display: grid;
+        place-items: center;
+        z-index: 1;
+      }
+
+      .frame-large {
+        width: min(78%, 470px);
+        height: 84%;
+        background: #fff;
+        padding: 12px;
+        box-shadow: var(--shadow);
+        transform: rotate(1.4deg);
+        position: relative;
+      }
+
+      .frame-large img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        filter: saturate(0.92) contrast(0.98);
+      }
+
+      .tape {
+        position: absolute;
+        width: 126px;
+        height: 36px;
+        top: 7%;
+        left: 48%;
+        transform: translateX(-50%) rotate(-4deg);
+        background: rgba(208, 194, 167, 0.68);
+        border: 1px solid rgba(117, 103, 79, 0.18);
+        backdrop-filter: blur(2px);
+        z-index: 3;
+      }
+
+      .tiny-stack {
+        position: absolute;
+        right: 2%;
+        top: 12%;
+        display: grid;
+        gap: 14px;
+        z-index: 2;
+      }
+
+      .tiny-stack .mini {
+        width: 136px;
+        background: #fff;
+        padding: 7px;
+        box-shadow: 0 14px 35px rgba(30, 25, 20, 0.18);
+      }
+      .tiny-stack .mini:first-child {
+        transform: rotate(4deg);
+      }
+      .tiny-stack .mini:last-child {
+        transform: rotate(-5deg) translateX(-18px);
+      }
+      .tiny-stack img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      .hero-badge {
+        position: absolute;
+        left: -2px;
+        bottom: 10%;
+        width: 138px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(21, 21, 21, 0.36);
+        background: rgba(244, 239, 231, 0.82);
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 0.11em;
+        transform: rotate(-12deg);
+        box-shadow: 0 12px 24px rgba(27, 22, 18, 0.08);
+      }
+      .hero-badge strong {
+        display: block;
+        font-size: 1.6rem;
+        letter-spacing: 0;
+      }
+
+      .scroll-note {
+        position: absolute;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        font-size: 0.68rem;
+        color: var(--muted);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .section {
+        padding: clamp(76px, 9vw, 126px) clamp(18px, 7vw, 108px);
+        border-bottom: 1px solid var(--line);
+        position: relative;
+      }
+      .section-head {
+        max-width: 1160px;
+        margin: 0 auto 52px;
+        display: grid;
+        grid-template-columns: 86px 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+      .section-no {
+        font-family: var(--font-display);
+        font-size: 3rem;
+        color: var(--wine);
+      }
+      .section-title {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2.9rem, 7vw, 6.1rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        font-weight: 700;
+      }
+      .section-title em {
+        color: #8e877d;
+        font-style: normal;
+        font-weight: 500;
+      }
+
+      .story-grid {
+        max-width: 1160px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 0.92fr 1.08fr;
+        gap: clamp(32px, 6vw, 84px);
+        align-items: center;
+      }
+
+      .story-collage {
+        position: relative;
+        min-height: 620px;
+      }
+      .story-card {
+        position: absolute;
+        background: #fff;
+        padding: 10px;
+        box-shadow: var(--shadow);
+      }
+      .story-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .story-card.main {
+        width: min(100%, 410px);
+        left: 0;
+        top: 0;
+        transform: rotate(-2deg);
+      }
+      .story-card.side {
+        width: min(58%, 230px);
+        right: 14px;
+        top: 70px;
+        transform: rotate(5deg);
+      }
+      .story-card.side img {
+        aspect-ratio: 3 / 4;
+        object-position: center top;
+      }
+      .story-card.bottom {
+        width: min(78%, 300px);
+        left: 60px;
+        bottom: 6px;
+        transform: rotate(3deg);
+      }
+      .story-card.bottom img {
+        aspect-ratio: 4 / 2.2;
+        object-position: center;
+      }
+      .story-note {
+        position: absolute;
+        right: 0;
+        bottom: -12px;
+        background: #151515;
+        color: #fff;
+        padding: 12px 18px;
+        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        transform: rotate(-3deg);
+      }
+
+      .story-copy p {
+        margin: 0 0 22px;
+        font-family: var(--font-serif);
+        font-size: clamp(1.26rem, 2.25vw, 1.72rem);
+        line-height: 1.68;
+        color: #36312d;
+      }
+
+      .story-copy p:first-of-type::first-letter {
+        float: left;
+        font-size: 5.2rem;
+        line-height: 0.83;
+        padding-right: 10px;
+        color: var(--wine);
+        font-weight: 700;
+      }
+
+      .mini-line {
+        height: 1px;
+        background: var(--line);
+        margin: 32px 0 24px;
+      }
+      .qualities {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .quality {
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(21, 19, 18, 0.24);
+        background: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+      }
+
+      .gallery-grid {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 18px;
+      }
+      .shot {
+        position: relative;
+        overflow: hidden;
+        background: #ddd5ca;
+        border-radius: 24px;
+        box-shadow: 0 14px 40px rgba(34, 28, 23, 0.08);
+      }
+      .shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+          transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1),
+          filter 0.5s ease;
+        filter: saturate(0.92);
+      }
+      .shot:hover img {
+        transform: scale(1.04);
+        filter: saturate(1.03);
+      }
+      .shot figcaption {
+        position: absolute;
+        left: 16px;
+        bottom: 14px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(251, 248, 241, 0.88);
+        backdrop-filter: blur(6px);
+        text-transform: uppercase;
+        letter-spacing: 0.11em;
+        font-size: 0.68rem;
+      }
+
+      .shot.one {
+        grid-column: span 5;
+        min-height: 560px;
+      }
+      .shot.two {
+        grid-column: span 3;
+        min-height: 270px;
+      }
+      .shot.three {
+        grid-column: span 4;
+        min-height: 270px;
+      }
+      .shot.four {
+        grid-column: span 4;
+        min-height: 430px;
+      }
+      .shot.five {
+        grid-column: span 4;
+        min-height: 430px;
+      }
+      .shot.six {
+        grid-column: span 4;
+        min-height: 430px;
+      }
+
+      .letter-wrap {
+        max-width: 1060px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .seal {
+        position: absolute;
+        right: -18px;
+        top: -22px;
+        width: 92px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--wine), #68211f);
+        color: white;
+        font-family: var(--font-display);
+        text-align: center;
+        letter-spacing: 0.06em;
+        font-size: 0.78rem;
+        transform: rotate(9deg);
+        box-shadow: 0 18px 32px rgba(107, 30, 28, 0.22);
+      }
+
+      .letter {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.72),
+          rgba(250, 246, 238, 0.82)
+        );
+        border: 1px solid rgba(21, 19, 18, 0.14);
+        box-shadow: var(--shadow);
+        padding: clamp(28px, 7vw, 74px);
+        border-radius: 30px;
+      }
+
+      .letter::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at top right,
+            rgba(197, 162, 100, 0.1),
+            transparent 25%
+          ),
+          linear-gradient(
+            90deg,
+            rgba(139, 46, 43, 0.04),
+            transparent 18% 82%,
+            rgba(139, 46, 43, 0.03)
+          );
+        pointer-events: none;
+      }
+
+      .letter-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+        gap: clamp(26px, 4vw, 40px);
+        align-items: start;
+      }
+
+      .letter-label {
+        margin: 0 0 24px;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        color: var(--wine);
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+
+      .wish-copy .line {
+        --delay: 0s;
+        position: relative;
+        margin: 0 0 18px;
+        padding: 0 2px 2px;
+        font-family: var(--font-serif);
+        font-size: clamp(1.22rem, 2.18vw, 1.62rem);
+        line-height: 1.78;
+        color: #322d29;
+        overflow: hidden;
+      }
+      .wish-copy .line::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0.2)
+        );
+        transform: translateX(-104%);
+        transition: transform 1.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+        transition-delay: var(--delay);
+      }
+      .wish-copy.in .line::after {
+        transform: translateX(104%);
+      }
+
+      .signature {
+        margin-top: 34px;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+      }
+      .signature .from {
+        color: var(--muted);
+        font-size: 0.88rem;
+        line-height: 1.7;
+      }
+      .signature .name {
+        font-family: var(--font-display);
+        font-size: clamp(2.1rem, 5vw, 3.8rem);
+        color: var(--wine);
+        font-style: italic;
+      }
+
+      .letter-side {
+        display: grid;
+        gap: 16px;
+      }
+      .letter-photo {
+        overflow: hidden;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 18px 36px rgba(37, 30, 25, 0.08);
+      }
+      .letter-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .letter-photo.tall {
+        min-height: 390px;
+      }
+      .letter-photo.small {
+        min-height: 210px;
+      }
+
+      .finale {
+        min-height: 86svh;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 90px 20px;
+        background: #111110;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .finale::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 50% 8%,
+            rgba(255, 255, 255, 0.09),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 15% 75%,
+            rgba(197, 162, 100, 0.12),
+            transparent 26%
+          ),
+          radial-gradient(
+            circle at 86% 35%,
+            rgba(139, 46, 43, 0.16),
+            transparent 22%
+          );
+        z-index: -2;
+      }
+
+      .floating-stars {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+      }
+      .floating-stars span {
+        position: absolute;
+        color: rgba(255, 255, 255, 0.16);
+        font-size: 1rem;
+        animation: drift linear infinite;
+      }
+
+      .finale-content {
+        position: relative;
+        max-width: 920px;
+        z-index: 2;
+      }
+      .finale-kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        font-size: 0.72rem;
+        color: #b3aea7;
+      }
+      .finale h2 {
+        font-family: var(--font-display);
+        font-size: clamp(3.3rem, 10vw, 8.2rem);
+        line-height: 0.95;
+        font-weight: 700;
+        margin: 22px 0 24px;
+        letter-spacing: -0.04em;
+      }
+      .finale h2 em {
+        font-style: normal;
+        color: #d7c4a2;
+      }
+      .finale p {
+        max-width: 660px;
+        margin: 0 auto 30px;
+        color: #d4cfc8;
+        line-height: 1.82;
+        font-size: 1.02rem;
+      }
+
+      .wish-btn {
+        background: linear-gradient(135deg, #fbf8f1, #efe6d8);
+        color: #191817;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        z-index: 115;
+        background: rgba(0, 0, 0, 0.62);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.35s ease,
+          visibility 0.35s ease;
+      }
+      .modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-card {
+        width: min(92vw, 620px);
+        padding: 38px 34px 30px;
+        border-radius: 28px;
+        background: linear-gradient(
+          180deg,
+          rgba(252, 249, 244, 0.96),
+          rgba(245, 238, 228, 0.95)
+        );
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
+        transform: translateY(18px) scale(0.97);
+        transition: transform 0.38s ease;
+        text-align: center;
+      }
+      .modal.show .modal-card {
+        transform: none;
+      }
+      .modal-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at top,
+          rgba(197, 162, 100, 0.18),
+          transparent 36%
+        );
+        pointer-events: none;
+      }
+      .close-btn {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid rgba(21, 19, 18, 0.16);
+        background: rgba(255, 255, 255, 0.55);
+        cursor: pointer;
+        font-size: 1.15rem;
+      }
+      .modal-badge {
+        font-size: 2.8rem;
+        margin-bottom: 8px;
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+      .modal-card h3 {
+        margin: 0 0 14px;
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 6vw, 3rem);
+        line-height: 1.05;
+      }
+      .modal-card p {
+        margin: 0 auto;
+        max-width: 470px;
+        font-family: var(--font-serif);
+        font-size: 1.35rem;
+        line-height: 1.7;
+        color: #37312d;
+      }
+      .modal-note {
+        margin-top: 22px;
+        color: #796e62;
+        font-size: 0.9rem;
+        letter-spacing: 0.06em;
+      }
+      .close-note {
+        margin-top: 22px;
+        background: #171615;
+        color: #fff;
+        box-shadow: none;
+      }
+
+      #confetti {
+        position: fixed;
+        inset: 0;
+        z-index: 114;
+        pointer-events: none;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(34px);
+        transition:
+          opacity 0.85s ease,
+          transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: none;
+      }
+      .reveal[data-delay="1"] {
+        transition-delay: 0.12s;
+      }
+      .reveal[data-delay="2"] {
+        transition-delay: 0.24s;
+      }
+      .reveal[data-delay="3"] {
+        transition-delay: 0.36s;
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.28;
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          opacity: 0.65;
+          transform: translateY(-3px) scale(1.06);
+        }
+      }
+      @keyframes drift {
+        from {
+          transform: translateY(100px) scale(0.9);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.7;
+        }
+        to {
+          transform: translateY(-110vh) scale(1.15);
+          opacity: 0;
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.08);
+        }
+      }
+
+      @media (max-width: 980px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 84px;
+        }
+        .hero::after {
+          display: none;
+        }
+        .hero-photo {
+          min-height: 700px;
+          height: auto;
+        }
+        .story-grid {
+          grid-template-columns: 1fr;
+        }
+        .story-collage {
+          min-height: 700px;
+        }
+        .gallery-grid {
+          grid-template-columns: repeat(6, 1fr);
+        }
+        .shot.one,
+        .shot.two,
+        .shot.three,
+        .shot.four,
+        .shot.five,
+        .shot.six {
+          grid-column: span 3;
+        }
+        .shot.one {
+          grid-column: span 6;
+          min-height: 400px;
+        }
+        .letter-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .brand {
+          left: 18px;
+        }
+        .hero-title {
+          font-size: clamp(3.5rem, 18vw, 6rem);
+        }
+        .hero-title .soft {
+          margin-left: 0.24em;
+        }
+        .hero-sub {
+          grid-template-columns: 72px 1fr;
+          gap: 12px;
+        }
+        .hero-sub .number {
+          font-size: 3.1rem;
+        }
+        .hero-photo {
+          min-height: 560px;
+        }
+        .frame-large {
+          width: 82%;
+          height: 74%;
+        }
+        .tiny-stack {
+          right: 0;
+          top: 7%;
+        }
+        .tiny-stack .mini {
+          width: 106px;
+        }
+        .hero-badge {
+          width: 108px;
+          left: 0;
+          bottom: 8%;
+        }
+        .section-head {
+          grid-template-columns: 54px 1fr;
+          gap: 12px;
+          margin-bottom: 38px;
+        }
+        .section-no {
+          font-size: 2rem;
+        }
+        .story-collage {
+          min-height: 560px;
+        }
+        .story-card.main {
+          width: min(92%, 320px);
+        }
+        .story-card.side {
+          width: 42%;
+          top: 52px;
+          right: 0;
+        }
+        .story-card.bottom {
+          width: 72%;
+          left: 34px;
+          bottom: 0;
+        }
+        .story-note {
+          font-size: 0.64rem;
+          padding: 10px 13px;
+          right: 8px;
+        }
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+        .shot.one,
+        .shot.two,
+        .shot.three,
+        .shot.four,
+        .shot.five,
+        .shot.six {
+          grid-column: auto;
+          min-height: 340px;
+        }
+        .letter {
+          border-radius: 24px;
+        }
+        .signature {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .seal {
+          right: 6px;
+          top: -30px;
+          width: 76px;
+        }
+        .modal-card p {
+          font-size: 1.18rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      button:focus-visible {
+        outline: 3px solid rgba(139, 46, 43, 0.42);
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+
+    <div class="loader" id="loader">
+      <div class="loader-card">
+        <div class="loader-kicker">Một món quà nhỏ cho ngày tốt nghiệp</div>
+        <h1 class="loader-title">
+          Gửi đến cậu<em>cô bạn mình gặp trong khóa học quân sự</em>
+        </h1>
+        <p class="loader-text">
+          Mình đã thay lại những bức ảnh đẹp nhất, sắp xếp mọi thứ thật chỉn chu
+          để gửi đến cậu một lời chúc vừa tinh tế, vừa thật lòng.
+        </p>
+        <button class="open-btn" id="openSite">MỞ LỜI CHÚC ✦</button>
+      </div>
+    </div>
+
+    <canvas id="confetti"></canvas>
+
+    <main class="site" id="site">
+      <section class="hero">
+        <div class="brand">GRADUATION · HCMUE</div>
+
+        <div class="hero-copy reveal">
+          <p class="eyebrow">
+            Congratulations · Tốt nghiệp Đại học Sư phạm TP.HCM
+          </p>
+          <h1 class="hero-title">
+            <span>Chúc</span>
+            <span class="soft">Mừng</span>
+          </h1>
+
+          <div class="hero-sub">
+            <div class="number">01</div>
+            <p>
+              Gửi đến cô bạn mình tình cờ gặp trong khóa học quân sự — hôm nay
+              cậu đã chạm tới một cột mốc thật đẹp: tốt nghiệp đại học. Chỉ mới
+              quen nhau không lâu, nhưng mình vẫn muốn dành cho cậu một lời chúc
+              thật chỉn chu và chân thành.
+            </p>
+          </div>
+
+          <div class="hero-quote">
+            “Có những người mình gặp không quá sớm, không quá lâu, nhưng lại đủ
+            để khiến mình thấy vui vì đã được quen.”
+          </div>
+        </div>
+
+        <div class="hero-photo reveal" data-delay="1">
+          <div class="tape"></div>
+          <div class="frame-large">
+            <img
+              src="assets/cover.webp"
+              alt="Ảnh tốt nghiệp HCMUE của cô bạn"
+            />
+          </div>
+
+          <div class="tiny-stack">
+            <div class="mini">
+              <img
+                src="assets/flowers.webp"
+                alt="Ảnh cầm hoa chúc mừng tốt nghiệp"
+              />
+            </div>
+            <div class="mini">
+              <img src="assets/aodai.webp" alt="Ảnh áo dài của cô bạn" />
+            </div>
+          </div>
+
+          <div class="hero-badge">
+            <span>HCMUE<br /><strong>2026</strong>Graduation</span>
+          </div>
+        </div>
+
+        <div class="scroll-note">Cuộn xuống để đọc tiếp ↓</div>
+      </section>
+
+      <section class="section">
+        <div class="section-head reveal">
+          <div class="section-no">02</div>
+          <h2 class="section-title">
+            Từ những ngày <em>rất nhỏ</em><br />đến hôm nay thật rực rỡ.
+          </h2>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-collage reveal">
+            <div class="story-card main">
+              <img src="assets/childhood.webp" alt="Ảnh thời nhỏ của cô bạn" />
+            </div>
+            <div class="story-card side">
+              <img src="assets/aodai.webp" alt="Ảnh áo dài của cô bạn" />
+            </div>
+            <div class="story-card bottom">
+              <img
+                src="assets/military.webp"
+                alt="Ảnh cùng bạn bè trong những ngày học quân sự"
+              />
+            </div>
+            <div class="story-note">From school days to graduation day</div>
+          </div>
+
+          <div class="story-copy reveal" data-delay="1">
+            <p>
+              Mình rất thích cảm giác nhìn một người đi qua nhiều chặng đường —
+              từ bức ảnh học trò ngày nào, đến những khoảnh khắc rất đời thường,
+              rồi cuối cùng là ngày cậu đứng thật xinh trong dấu mốc tốt nghiệp.
+            </p>
+            <p>
+              Dù tụi mình chỉ mới quen nhau qua khóa học quân sự, mình vẫn cảm
+              nhận ở cậu một nét rất riêng: vừa đáng yêu, vừa có chút cá tính,
+              lại có kiểu năng lượng khiến người khác dễ nhớ.
+            </p>
+            <p>
+              Có lẽ sau này khi nhớ lại, điều mình giữ không chỉ là vài bức ảnh,
+              mà còn là cảm giác vui vì đã có một cuộc gặp gỡ nhỏ nhưng đẹp.
+            </p>
+            <div class="mini-line"></div>
+            <div class="qualities">
+              <span class="quality">Dễ thương</span>
+              <span class="quality">Cá tính</span>
+              <span class="quality">Rực rỡ</span>
+              <span class="quality">Dịu dàng</span>
+              <span class="quality">Đáng nhớ</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head reveal">
+          <div class="section-no">03</div>
+          <h2 class="section-title">
+            Những khoảnh khắc<br /><em>rất đúng chất cậu.</em>
+          </h2>
+        </div>
+
+        <div class="gallery-grid">
+          <figure class="shot one reveal">
+            <img src="assets/bao_hanh.jpg" alt="Ảnh kỷ niệm thời học quân sự" />
+            <figcaption>Kỷ niệm bắt đầu từ quân sự</figcaption>
+          </figure>
+          <figure class="shot two reveal" data-delay="1">
+            <img src="assets/flowers.webp" alt="Ảnh nhận hoa tốt nghiệp" />
+            <figcaption>Ngày thật đẹp</figcaption>
+          </figure>
+          <figure class="shot three reveal" data-delay="2">
+            <img src="assets/aodai.webp" alt="Ảnh áo dài trắng" />
+            <figcaption>Nét dịu dàng</figcaption>
+          </figure>
+          <figure class="shot four reveal">
+            <img
+              src="assets/blackdress.webp"
+              alt="Ảnh chân dung váy đen chấm bi"
+            />
+            <figcaption>Rất cá tính</figcaption>
+          </figure>
+          <figure class="shot five reveal" data-delay="1">
+            <img
+              src="assets/whitedress.webp"
+              alt="Ảnh ngồi ngoài trời với trang phục trắng"
+            />
+            <figcaption>Một vẻ rất riêng</figcaption>
+          </figure>
+          <figure class="shot six reveal" data-delay="2">
+            <img src="assets/cover.webp" alt="Poster tốt nghiệp HCMUE" />
+            <figcaption>Congratulations, graduate!</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head reveal">
+          <div class="section-no">04</div>
+          <h2 class="section-title">
+            Lời chúc mình muốn<br /><em>gửi riêng đến cậu.</em>
+          </h2>
+        </div>
+
+        <div class="letter-wrap reveal">
+          <div class="seal">FOR<br />YOU ♡</div>
+          <article class="letter">
+            <div class="letter-grid">
+              <div class="wish-copy" id="wishCopy">
+                <p class="letter-label">A sincere message</p>
+                <p class="line" style="--delay: 0.05s">
+                  Chúc mừng cậu đã chính thức tốt nghiệp Trường Đại học Sư phạm
+                  Thành phố Hồ Chí Minh.
+                </p>
+                <p class="line" style="--delay: 0.18s">
+                  Đây không chỉ là kết thúc của một chặng đường sinh viên, mà
+                  còn là phần thưởng rất xứng đáng cho tất cả những cố gắng, áp
+                  lực, kiên trì và trưởng thành mà cậu đã đi qua.
+                </p>
+                <p class="line" style="--delay: 0.31s">
+                  Mình mong sau ngày hôm nay, cậu sẽ tiếp tục bước vào một hành
+                  trình mới với thật nhiều tự tin, may mắn và những điều tốt đẹp
+                  — đúng với phiên bản rực rỡ nhất của chính mình.
+                </p>
+                <p class="line" style="--delay: 0.44s">
+                  Cảm ơn cậu vì đã trở thành một cuộc gặp gỡ dễ thương trong
+                  những ngày quân sự. Dù chúng ta mới quen, mình vẫn thật lòng
+                  thấy vui vì đã biết cậu.
+                </p>
+                <p class="line" style="--delay: 0.57s">
+                  Chúc cậu luôn giữ được nụ cười, sự đáng yêu, sự cá tính và cả
+                  nguồn năng lượng rất riêng ấy. Tốt nghiệp thật rực rỡ nhé — vì
+                  cậu xứng đáng với một tương lai thật đẹp.
+                </p>
+
+                <div class="signature">
+                  <div class="from">
+                    Từ người bạn<br />đã rất vui vì được quen cậu
+                  </div>
+                  <div class="name">Thúy Hạnh</div>
+                </div>
+              </div>
+
+              <div class="letter-side">
+                <div class="letter-photo tall">
+                  <img
+                    src="assets/blackdress.webp"
+                    alt="Ảnh chân dung cô bạn"
+                  />
+                </div>
+                <div class="letter-photo small">
+                  <img src="assets/flowers.webp" alt="Ảnh chúc mừng cầm hoa" />
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="finale">
+        <div class="floating-stars" aria-hidden="true">
+          <span
+            style="
+              left: 8%;
+              top: 80%;
+              animation-duration: 10s;
+              animation-delay: 0s;
+            "
+            >✦</span
+          >
+          <span
+            style="
+              left: 18%;
+              top: 92%;
+              animation-duration: 12s;
+              animation-delay: 2s;
+            "
+            >✧</span
+          >
+          <span
+            style="
+              left: 34%;
+              top: 88%;
+              animation-duration: 11s;
+              animation-delay: 1s;
+            "
+            >✦</span
+          >
+          <span
+            style="
+              left: 54%;
+              top: 94%;
+              animation-duration: 13s;
+              animation-delay: 3s;
+            "
+            >✧</span
+          >
+          <span
+            style="
+              left: 68%;
+              top: 84%;
+              animation-duration: 9s;
+              animation-delay: 1.5s;
+            "
+            >✦</span
+          >
+          <span
+            style="
+              left: 82%;
+              top: 90%;
+              animation-duration: 12s;
+              animation-delay: 2.7s;
+            "
+            >✧</span
+          >
+          <span
+            style="
+              left: 92%;
+              top: 82%;
+              animation-duration: 10.5s;
+              animation-delay: 0.8s;
+            "
+            >✦</span
+          >
+        </div>
+
+        <div class="finale-content reveal">
+          <div class="finale-kicker">
+            The end of university · the beginning of everything
+          </div>
+          <h2>Chúc cậu luôn<br /><em>rực rỡ theo cách riêng.</em></h2>
+          <p>
+            Nhấn nút bên dưới để nhận lời chúc cuối cùng. Mình mong sau cánh
+            cổng đại học, cậu sẽ gặp được những điều xứng đáng với mọi nỗ lực mà
+            cậu đã trải qua.
+          </p>
+          <button class="wish-btn" id="wishBtn">NHẬN LỜI CHÚC ✦</button>
+        </div>
+      </section>
+    </main>
+
+    <div
+      class="modal"
+      id="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Lời chúc cuối cùng"
+    >
+      <div class="modal-card">
+        <button class="close-btn" id="closeModal" aria-label="Đóng">×</button>
+        <div class="modal-badge">🎓</div>
+        <h3>Chúc mừng cậu tốt nghiệp!</h3>
+        <p>
+          Mong cậu sẽ luôn bình an, tự tin và gặp thật nhiều niềm vui trên hành
+          trình mới. Chúc mọi điều cậu đang ấp ủ sẽ lần lượt nở hoa — đẹp, đúng
+          lúc và thật xứng đáng.
+        </p>
+        <div class="modal-note">Một lời chúc nhỏ, nhưng là thật lòng.</div>
+        <button class="close-note" id="closeNote">CẢM ƠN CẬU ĐÃ XEM</button>
+      </div>
+    </div>
+
+    <script>
+      const loader = document.getElementById("loader");
+      const site = document.getElementById("site");
+      const openSite = document.getElementById("openSite");
+      const wishBtn = document.getElementById("wishBtn");
+      const modal = document.getElementById("modal");
+      const closeModal = document.getElementById("closeModal");
+      const closeNote = document.getElementById("closeNote");
+      const progress = document.getElementById("progress");
+      const wishCopy = document.getElementById("wishCopy");
+
+      function updateProgress() {
+        const scrollTop = window.scrollY;
+        const scrollHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const value = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+        progress.style.transform = `scaleX(${value})`;
+      }
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      updateProgress();
+
+      openSite.addEventListener("click", () => {
+        loader.classList.add("hide");
+        site.classList.add("visible");
+        setTimeout(
+          () =>
+            document
+              .querySelector(".hero")
+              .scrollIntoView({ behavior: "smooth" }),
+          160,
+        );
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              if (entry.target.id === "wishCopy")
+                entry.target.classList.add("in");
+            }
+          });
+        },
+        { threshold: 0.16 },
+      );
+
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
+      observer.observe(wishCopy.closest(".letter-wrap"));
+
+      const letterObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) wishCopy.classList.add("in");
+          });
+        },
+        { threshold: 0.35 },
+      );
+      letterObserver.observe(document.querySelector(".letter"));
+
+      function openModal() {
+        modal.classList.add("show");
+        launchConfetti();
+      }
+      function closeModalFn() {
+        modal.classList.remove("show");
+      }
+
+      wishBtn.addEventListener("click", openModal);
+      closeModal.addEventListener("click", closeModalFn);
+      closeNote.addEventListener("click", closeModalFn);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModalFn();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModalFn();
+      });
+
+      const canvas = document.getElementById("confetti");
+      const ctx = canvas.getContext("2d");
+      let pieces = [];
+      let animationId;
+
+      function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      function launchConfetti() {
+        const colors = ["#f8f2e8", "#8b2e2b", "#c5a264", "#ffffff", "#6d6b56"];
+        const shapes = ["rect", "rect", "rect", "circle", "star"];
+        pieces = Array.from({ length: 170 }, () => ({
+          x: window.innerWidth / 2 + (Math.random() - 0.5) * 200,
+          y: window.innerHeight * 0.6,
+          vx: (Math.random() - 0.5) * 10,
+          vy: -Math.random() * 12 - 5,
+          size: Math.random() * 8 + 4,
+          rot: Math.random() * Math.PI,
+          vr: (Math.random() - 0.5) * 0.24,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          life: 1,
+        }));
+        cancelAnimationFrame(animationId);
+        animateConfetti();
+      }
+
+      function drawStar(size) {
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(
+            Math.cos(((18 + i * 72) * Math.PI) / 180) * size,
+            -Math.sin(((18 + i * 72) * Math.PI) / 180) * size,
+          );
+          ctx.lineTo(
+            Math.cos(((54 + i * 72) * Math.PI) / 180) * size * 0.45,
+            -Math.sin(((54 + i * 72) * Math.PI) / 180) * size * 0.45,
+          );
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        pieces.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.22;
+          p.vx *= 0.992;
+          p.rot += p.vr;
+          p.life -= 0.0055;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.globalAlpha = Math.max(p.life, 0);
+          ctx.fillStyle = p.color;
+          if (p.shape === "circle") {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size * 0.45, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (p.shape === "star") {
+            drawStar(p.size * 0.5);
+          } else {
+            ctx.fillRect(-p.size / 2, -p.size / 3, p.size, p.size * 0.66);
+          }
+          ctx.restore();
+        });
+        pieces = pieces.filter(
+          (p) => p.life > 0 && p.y < window.innerHeight + 90,
+        );
+        if (pieces.length) animationId = requestAnimationFrame(animateConfetti);
+        else ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      }
+    </script>
+  </body>
+</html>
