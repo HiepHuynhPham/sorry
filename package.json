@@ -1,6 +1,7 @@
 {
   "name": "loi-chuc-tot-nghiep-hcmue",
   "version": "0.1.0",
+  "description": "Public graduation greeting site.",
   "private": true,
   "packageManager": "npm",
   "type": "module",
