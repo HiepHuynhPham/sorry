@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#fff4f7" />
     <title>Đơn xin nhỏ em hết giận</title>
     <link rel="stylesheet" href="../assets/css/audio-control.css" />
-    <link rel="stylesheet" href="../assets/css/feedback.css" />
+    <link rel="stylesheet" href="../assets/css/feedback.css?v=20260722-5" />
     <style>
       :root {
         --pink: #ff7fa5;
@@ -86,6 +86,7 @@
         opacity: 0;
         visibility: hidden;
         transform: scale(1.04);
+        pointer-events: none;
       }
 
       .intro-card {
@@ -545,6 +546,7 @@
             rgba(255, 127, 165, 0.15),
             transparent 24%
           );
+        pointer-events: none;
       }
       .decision-inner {
         position: relative;
@@ -615,10 +617,12 @@
         opacity: 0;
         visibility: hidden;
         transition: 0.35s ease;
+        pointer-events: none;
       }
       .modal.show {
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
       }
       .modal-card {
         width: min(92vw, 570px);
@@ -1156,7 +1160,8 @@
         if (particles.length) raf = requestAnimationFrame(animate);
       }
     </script>
+    <script src="../assets/js/config.js?v=20260722-5"></script>
     <script type="module" src="../assets/js/case-audio.js"></script>
-    <script type="module" src="../assets/js/case-feedback.js"></script>
+    <script type="module" src="../assets/js/case-feedback.js?v=20260722-5"></script>
   </body>
 </html>

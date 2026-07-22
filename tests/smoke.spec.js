@@ -45,6 +45,9 @@ test("case 002 interaction and accessible modal", async ({ page }) => {
   await expect(page.locator(".modal-card")).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeHidden();
+  await page.getByRole("button", { name: "Cho em thêm thời gian" }).click();
+  await page.getByLabel("Lời nhắn cho người xin lỗi").click();
+  await expect(page.getByLabel("Lời nhắn cho người xin lỗi")).toBeFocused();
 });
 
 test("case 002 mobile does not overflow", async ({ page }) => {
@@ -112,6 +115,79 @@ test("recipient feedback keeps message as text and does not inject HTML", async 
   expect(await page.locator(".recipient-feedback img").count()).toBe(0);
   expect(await page.evaluate(() => window.__xss)).toBeUndefined();
 });
+
+test("recipient message is capped at 300 characters and keeps a clear selection", async ({ page }) => {
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  await page.locator("#open-case").click();
+  const food = page.getByRole("button", { name: "Đền bằng đồ ăn đi" });
+  await food.click();
+  await expect(food).toHaveAttribute("aria-pressed", "true");
+  const textarea = page.getByLabel("Lời nhắn cho người xin lỗi");
+  await textarea.fill("á".repeat(350));
+  await expect(textarea).toHaveValue("á".repeat(300));
+  await expect(page.locator(".feedback-form small")).toHaveText("300/300");
+});
+
+test("failed feedback request preserves text and re-enables submit", async ({ page }) => {
+  await page.route("**/rest/v1/rpc/submit_case_response", (route) => route.abort("internetdisconnected"));
+  await page.goto("http://127.0.0.1:8766/cases/case-001.html");
+  await page.locator("#openBtn").click();
+  await page.getByRole("button", { name: "Cho em thêm thời gian" }).click();
+  const textarea = page.getByLabel("Lời nhắn cho người xin lỗi");
+  const message = "Anh nhớ lần sau đã nhận lời thì đặt báo thức liền nha.";
+  await textarea.fill(message);
+  const send = page.getByRole("button", { name: "Gửi phản hồi" });
+  await send.click();
+  await expect(page.locator(".feedback-result")).toContainText("nội dung vẫn được giữ lại");
+  await expect(textarea).toHaveValue(message);
+  await expect(send).toBeEnabled();
+});
+
+for (const viewport of [
+  { width: 360, height: 800 }, { width: 412, height: 915 }, { width: 768, height: 1024 },
+  { width: 1366, height: 768 }, { width: 1920, height: 1080 },
+]) {
+  test(`feedback stays interactive at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+    await page.locator("#open-case").click();
+    await page.getByRole("button", { name: "Đền bằng đồ ăn đi" }).click();
+    const textarea = page.getByLabel("Lời nhắn cho người xin lỗi");
+    await textarea.click();
+    await expect(textarea).toBeFocused();
+    const width = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+    expect(width.scroll).toBeLessThanOrEqual(width.client + 1);
+  });
+}
+
+for (const testCase of [
+  { name: "case 001", path: "case-001.html", open: "#openBtn" },
+  { name: "case 002", path: "case-002.html", open: "#open-case" },
+]) {
+  test(`textarea receives pointer, keyboard and Vietnamese input in ${testCase.name}`, async ({ page }) => {
+    await page.goto(`http://127.0.0.1:8766/cases/${testCase.path}`);
+    await page.locator(testCase.open).click();
+    await page.getByRole("button", { name: "Cho em thêm thời gian" }).click();
+    const textarea = page.getByLabel("Lời nhắn cho người xin lỗi");
+    await textarea.scrollIntoViewIfNeeded();
+    const hitTarget = await textarea.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const target = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      const style = getComputedStyle(element);
+      return { tag: target?.tagName, isTextarea: target === element, pointerEvents: style.pointerEvents, visibility: style.visibility, display: style.display, disabled: element.disabled, readOnly: element.readOnly, tabIndex: element.tabIndex };
+    });
+    expect(hitTarget).toMatchObject({ tag: "TEXTAREA", isTextarea: true, pointerEvents: "auto", visibility: "visible", disabled: false, readOnly: false, tabIndex: 0 });
+    await textarea.click({ position: { x: 20, y: 20 } });
+    await expect(textarea).toBeFocused();
+    await textarea.pressSequentially("Anh nhớ đừng quên lần sau nha — em vẫn còn giận xíu.");
+    await expect(textarea).toHaveValue("Anh nhớ đừng quên lần sau nha — em vẫn còn giận xíu.");
+    await expect(page.locator(".feedback-form small")).toHaveText("52/300");
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("button", { name: "Gửi phản hồi" })).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(textarea).toBeFocused();
+  });
+}
 
 test("safe mode disables dodge, audio control and complex effects", async ({ page }) => {
   await page.goto("http://127.0.0.1:8766/cases/case-002.html");

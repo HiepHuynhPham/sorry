@@ -40,7 +40,7 @@ async function loadActiveCase() {
         if (error && error.code !== "PGRST202") console.info("Không thể ghi nhận lượt mở:", error.message);
       }).catch(() => undefined);
     }, { once: true });
-    frame.src = `cases/${activeCase.slug}.html`;
+    frame.src = `cases/${activeCase.slug}.html?v=20260722-5`;
   } catch (error) {
     console.error("Không tải được hồ sơ công khai:", error);
     showError("Có một nhịp bị lỡ. Bạn thử lại sau một chút nha.");

@@ -13,8 +13,8 @@ if (decision) {
   const options = [{ type: "need_time", label: "Cho em thêm thời gian" }, { type: "food", label: "Đền bằng đồ ăn đi" }];
   options.forEach(({ type, label }) => { const button = document.createElement("button"); button.type = "button"; button.dataset.response = type; button.textContent = label; choices.append(button); });
   const form = document.createElement("form"); form.className = "feedback-form"; form.hidden = true;
-  const formTitle = document.createElement("p"); formTitle.textContent = "Bạn có muốn để lại lời nhắn không?";
-  const textarea = document.createElement("textarea"); textarea.maxLength = 300; textarea.rows = 4; textarea.placeholder = "Lời nhắn tối đa 300 ký tự (không bắt buộc)"; textarea.setAttribute("aria-label", "Lời nhắn cho người xin lỗi");
+  const formTitle = document.createElement("label"); formTitle.htmlFor = "recipient-message"; formTitle.textContent = "Bạn có muốn để lại lời nhắn không?";
+  const textarea = document.createElement("textarea"); textarea.id = "recipient-message"; textarea.maxLength = 300; textarea.rows = 4; textarea.placeholder = "Lời nhắn tối đa 300 ký tự (không bắt buộc)"; textarea.setAttribute("aria-label", "Lời nhắn cho người xin lỗi");
   const count = document.createElement("small"); count.textContent = "0/300";
   const actions = document.createElement("div"); actions.className = "feedback-actions";
   const send = document.createElement("button"); send.type = "submit"; send.textContent = "Gửi phản hồi";
@@ -22,7 +22,11 @@ if (decision) {
   const result = document.createElement("p"); result.className = "feedback-result"; result.setAttribute("role", "status");
   actions.append(send, skip); form.append(formTitle, textarea, count, actions); panel.append(title, hint, choices, form, result); decision.append(panel);
   let selectedType = null;
-  const choose = (type, focusMessage = true) => { selectedType = type; form.hidden = false; result.textContent = ""; if (focusMessage) textarea.focus(); };
+  const choose = (type, focusMessage = true) => {
+    selectedType = type; form.hidden = false; result.textContent = "";
+    choices.querySelectorAll("button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.response === type)));
+    if (focusMessage) textarea.focus({ preventScroll: true });
+  };
   choices.addEventListener("click", (event) => { const type = event.target.closest("button")?.dataset.response; if (type) choose(type); });
   document.querySelector(caseSlug === "case-001" ? "#yesBtn" : "#forgive")?.addEventListener("click", () => choose("forgiven", false));
   document.querySelector(caseSlug === "case-001" ? "#notYetBtn" : "#angry")?.addEventListener("click", () => choose("still_angry", false));
