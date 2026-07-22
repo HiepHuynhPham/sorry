@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#fff4f7" />
     <title>Đơn xin nhỏ em hết giận</title>
     <link rel="stylesheet" href="../assets/css/audio-control.css" />
+    <link rel="stylesheet" href="../assets/css/feedback.css" />
     <style>
       :root {
         --pink: #ff7fa5;
@@ -1039,6 +1040,7 @@
       ];
 
       function dodgeButton() {
+        if (document.documentElement.dataset.safeMode === "true") return;
         dodgeCount++;
         if (dodgeCount <= 4) {
           const zone = buttonZone.getBoundingClientRect();
@@ -1078,7 +1080,7 @@
 
       yesBtn.addEventListener("click", () => {
         modal.classList.add("show");
-        launchConfetti();
+        if (document.documentElement.dataset.safeMode !== "true") launchConfetti();
       });
       closeModal.addEventListener("click", () =>
         modal.classList.remove("show"),
@@ -1155,5 +1157,6 @@
       }
     </script>
     <script type="module" src="../assets/js/case-audio.js"></script>
+    <script type="module" src="../assets/js/case-feedback.js"></script>
   </body>
 </html>

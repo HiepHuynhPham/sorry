@@ -62,4 +62,14 @@ control.addEventListener("click", async () => {
 });
 
 updateControl();
+window.addEventListener("message", (event) => {
+  if (event.origin !== location.origin || event.data?.type !== "sorry-site:settings") return;
+  document.documentElement.dataset.safeMode = String(Boolean(event.data.safeMode));
+  audioManager.setGlobalEnabled(event.data.globalAudioEnabled !== false && !event.data.safeMode);
+  if (event.data.globalAudioEnabled === false || event.data.safeMode) {
+    control.disabled = true;
+    control.setAttribute("aria-label", "Âm thanh đang được quản trị viên tắt");
+    control.title = "Âm thanh đang được quản trị viên tắt";
+  }
+});
 window.addEventListener("pagehide", () => audioManager.stopAll(), { once: true });

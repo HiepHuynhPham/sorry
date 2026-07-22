@@ -81,3 +81,41 @@ Không force-push. Xem lịch sử bằng `git log --oneline`, sau đó dùng `g
 Nếu sau này thay bằng file local, đặt file tự tạo hoặc có giấy phép rõ ràng trong `assets/audio/`, ghi nguồn/giấy phép tại đây và giữ fallback để giao diện không phụ thuộc file. Không sử dụng nhạc có bản quyền khi chưa được phép.
 
 Để vô hiệu hóa toàn bộ hệ thống khi xử lý sự cố, bỏ thẻ `case-audio.js` và `audio-control.css` khỏi hai trang case; nội dung, animation và các nút vẫn hoạt động độc lập.
+
+## Admin Center – migration 002
+
+Dashboard mở rộng nằm ở `admin.html`, preview bảo vệ session nằm ở `preview.html`. Database migration là `supabase/migrations/002_admin_center.sql`.
+
+### Cách kích hoạt
+
+1. Giữ nguyên bản sao lưu database nếu project đang có dữ liệu quan trọng.
+2. Mở Supabase **SQL Editor**, dán toàn bộ `002_admin_center.sql` và chạy một lần. Migration dùng `if not exists` cho bảng/cột và chạy trong transaction.
+3. Kiểm tra SQL hoàn tất không có lỗi rồi đổi `ADMIN_CENTER_MIGRATION_READY` trong `assets/js/config.js` từ `false` thành `true`.
+4. Commit/push config và tải lại website. Không bật cờ trước khi SQL chạy xong; frontend cố ý giữ chế độ tương thích để site hiện tại không lỗi.
+
+### Kiến trúc dữ liệu và RLS
+
+- `cases`: bổ sung recipient, trạng thái, visibility, JSON content/theme/audio, dodge limit và metadata tạo hồ sơ. Partial unique index bảo đảm chỉ có một hàng `published`.
+- `case_responses`: phản hồi và lời nhắn tối đa 300 ký tự; chỉ admin đọc. Anonymous chỉ ghi qua `submit_case_response` với kiểm tra case public và tối đa ba lần/session/24 giờ.
+- `case_views`: lượt mở ẩn danh, chỉ một lượt/case/session trong sáu giờ qua RPC `record_case_view`; không thu IP hoặc vị trí.
+- `case_versions`: snapshot trước mỗi lần admin cập nhật case.
+- `audit_logs`: ghi hành động publish; chỉ admin đọc.
+- `site_settings`: maintenance mode, global audio và safe mode.
+
+Anonymous không được đọc trực tiếp `site_settings`, phản hồi, lượt xem, version hoặc audit. RPC `get_public_site_state` chỉ trả bốn setting cần cho giao diện. Quyền đọc `cases` được cấp theo cột, loại `created_by` và private token. Công khai case dùng RPC transaction `publish_case`; RLS vẫn kiểm tra lại quyền admin bằng JWT.
+
+### Sử dụng
+
+- **Hồ sơ:** xem metadata, mở preview, công khai atomically, lưu trữ case không active và mở phản hồi liên quan.
+- **Preview:** chỉ session admin đọc được row case qua RLS; query `id` chỉ định đối tượng, không cấp quyền. Có khung desktop/mobile và banner cảnh báo.
+- **Phản hồi:** lọc theo loại/chưa xem, đọc lời nhắn và đánh dấu đã xem. Dữ liệu luôn đưa vào DOM bằng `textContent`.
+- **Cài đặt:** bật maintenance, tắt âm thanh toàn site, safe mode hoặc khôi phục case 001. Mọi thao tác cần session admin và RLS.
+- **Public:** hai lựa chọn cũ vẫn giữ nguyên; bổ sung “Cho em thêm thời gian”, “Đền bằng đồ ăn” và lời nhắn tùy chọn. Nội dung lỗi không bị xóa khỏi textarea.
+
+### Kiểm tra RLS sau migration
+
+Với anon key, `GET /rest/v1/case_responses` và `GET /rest/v1/audit_logs` phải trả 401/403. PATCH `site_settings` hoặc `cases` không được thay đổi hàng. `get_public_site_state` chỉ trả setting public. `submit_case_response` chỉ chấp nhận case đang active/public. Sau đó đăng nhập admin để xác nhận dashboard đọc được responses và preview draft.
+
+### Phạm vi hiện tại
+
+Giai đoạn 1 đã có dashboard, trạng thái, publish, preview, phản hồi/lời nhắn, view dedupe, audit publish, snapshot version và công cụ khẩn cấp. Form tạo/chỉnh sửa/nhân bản nhiều bước, renderer cho case 003+, khôi phục version bằng UI, private-link token, phiếu cam kết/chụp phiếu, audio preview trong admin và email notification thuộc Giai đoạn 2–3, chưa được bật trong giao diện này. HTML template 001/002 vẫn là asset public của GitHub Pages; không đặt dữ liệu bí mật trong các template đó.

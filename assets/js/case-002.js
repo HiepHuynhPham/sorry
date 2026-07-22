@@ -7,14 +7,14 @@
   document.querySelectorAll(".reveal").forEach((el) => reduced ? el.classList.add("in") : observer.observe(el));
 
   const angry = $("#angry"); let dodges = 0;
-  const dodge = () => { if (dodges >= 2 || reduced) return; dodges += 1; angry.style.transform = `translate(${dodges % 2 ? -70 : 70}px,${dodges * 4}px)`; };
+  const dodge = () => { if (dodges >= 2 || reduced || document.documentElement.dataset.safeMode === "true") return; dodges += 1; angry.style.transform = `translate(${dodges % 2 ? -70 : 70}px,${dodges * 4}px)`; };
   angry.addEventListener("pointerenter", dodge);
   angry.addEventListener("focus", dodge);
   angry.addEventListener("click", () => { angry.style.transform = "none"; dodges = 2; $("#response").textContent = "Anh hiểu. Anh không ép em phải hết giận ngay. Anh vẫn xin lỗi em đàng hoàng và sẽ nghiêm túc sửa lỗi."; });
 
   const modal = $("#modal"), card = modal.querySelector(".modal-card"), close = $("#close-modal"); let previousFocus;
   function closeModal() { modal.hidden = true; stopConfetti(); previousFocus?.focus(); }
-  $("#forgive").addEventListener("click", () => { previousFocus = document.activeElement; modal.hidden = false; card.focus(); if (!reduced) startConfetti(); });
+  $("#forgive").addEventListener("click", () => { previousFocus = document.activeElement; modal.hidden = false; card.focus(); if (!reduced && document.documentElement.dataset.safeMode !== "true") startConfetti(); });
   close.addEventListener("click", closeModal);
   modal.addEventListener("click", (event) => event.target === modal && closeModal());
   addEventListener("keydown", (event) => { if (event.key === "Escape" && !modal.hidden) closeModal(); });

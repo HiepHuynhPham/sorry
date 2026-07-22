@@ -102,10 +102,39 @@ test("case remains usable when Web Audio is unavailable", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
+test("recipient feedback keeps message as text and does not inject HTML", async ({ page }) => {
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  await page.locator("#open-case").click();
+  await page.getByRole("button", { name: "Cho em thêm thời gian" }).click();
+  const textarea = page.getByLabel("Lời nhắn cho người xin lỗi");
+  await textarea.fill('<img src=x onerror="window.__xss=true">');
+  expect(await textarea.inputValue()).toContain("<img");
+  expect(await page.locator(".recipient-feedback img").count()).toBe(0);
+  expect(await page.evaluate(() => window.__xss)).toBeUndefined();
+});
+
+test("safe mode disables dodge, audio control and complex effects", async ({ page }) => {
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  await page.locator("#open-case").click();
+  await page.evaluate(() => window.postMessage({ type: "sorry-site:settings", globalAudioEnabled: true, safeMode: true }, location.origin));
+  await expect(page.locator("html")).toHaveAttribute("data-safe-mode", "true");
+  await expect(page.locator(".audio-control")).toBeDisabled();
+  const angry = page.locator("#angry");
+  await angry.hover();
+  await expect(angry).toHaveCSS("transform", "none");
+});
+
+test("anonymous preview is blocked before case data is loaded", async ({ page }) => {
+  await page.goto("http://127.0.0.1:8766/preview.html?id=1");
+  await expect(page.getByRole("heading", { name: "Không thể mở preview" })).toBeVisible();
+  await expect(page.locator("#device-frame")).toBeHidden();
+});
+
 test("admin dashboard stays hidden without a session", async ({ page }) => {
   await instrumentAudio(page);
   await page.goto("http://127.0.0.1:8766/admin.html");
   await expect(page.locator("#login-panel")).toBeVisible();
   await expect(page.locator("#dashboard")).toBeHidden();
   expect(await page.evaluate(() => window.__audioTest.contexts)).toBe(0);
+  await expect(page.locator(".sidebar")).toContainText("Phản hồi");
 });

@@ -20,6 +20,7 @@ class AudioManager {
     this.effectNodes = new Set();
     this.lastDodgeAt = 0;
     this.muted = false;
+    this.globalEnabled = true;
     this.musicVolume = 0.18;
     this.effectVolume = 0.34;
     this.visibilityHandler = () => this.handleVisibility();
@@ -75,14 +76,14 @@ class AudioManager {
     this.initialize();
     if (this.caseId !== caseId) this.stopMusic(false);
     this.caseId = caseId;
-    if (!this.unlocked || this.muted || document.hidden) return;
+    if (!this.unlocked || this.muted || !this.globalEnabled || document.hidden) return;
     this.stopMusic(false);
     this.fadeGain(this.musicGain, this.musicVolume, 1.25);
     this.scheduleMusicLoop();
   }
 
   scheduleMusicLoop() {
-    if (!this.context || this.muted || !this.caseId || document.hidden) return;
+    if (!this.context || this.muted || !this.globalEnabled || !this.caseId || document.hidden) return;
     const now = this.context.currentTime + 0.04;
     const isCaseOne = this.caseId === "case-001";
     const motif = isCaseOne
@@ -98,7 +99,7 @@ class AudioManager {
   }
 
   playEffect(name, variant = 0) {
-    if (!this.context || !this.unlocked || this.muted || document.hidden) return;
+    if (!this.context || !this.unlocked || this.muted || !this.globalEnabled || document.hidden) return;
     const nowMs = performance.now();
     if (name === "button-dodge" && nowMs - this.lastDodgeAt < 250) return;
     if (name === "button-dodge") this.lastDodgeAt = nowMs;
@@ -188,6 +189,7 @@ class AudioManager {
 
   setMusicVolume(value) { this.musicVolume = clamp(Number(value)); this.savePreference(STORAGE.musicVolume, this.musicVolume); if (this.musicGain && !this.muted) this.fadeGain(this.musicGain, this.musicVolume, .2); }
   setEffectVolume(value) { this.effectVolume = clamp(Number(value)); this.savePreference(STORAGE.effectVolume, this.effectVolume); if (this.effectGain) this.effectGain.gain.value = this.effectVolume; }
+  setGlobalEnabled(value) { this.globalEnabled = Boolean(value); if (!this.globalEnabled) this.stopAll(); else if (!this.muted && this.unlocked) this.startCaseMusic(this.caseId); }
 
   handleVisibility() {
     if (!this.context || !this.unlocked) return;

@@ -1,4 +1,5 @@
 import { getClient } from "./supabase.js";
+import { getAnonymousSessionId } from "./privacy-session.js";
 
 const status = document.querySelector("#status");
 const retry = document.querySelector("#retry");
@@ -21,12 +22,29 @@ async function loadActiveCase() {
     return;
   }
   try {
-    const { data: setting, error: settingError } = await client.from("site_settings").select("active_case_id").eq("id", 1).single();
+    const enhanced = window.APP_CONFIG?.ADMIN_CENTER_MIGRATION_READY === true;
+    let setting, settingError;
+    if (enhanced) ({ data: setting, error: settingError } = await client.rpc("get_public_site_state").single());
+    else {
+      ({ data: setting, error: settingError } = await client.from("site_settings").select("active_case_id").eq("id", 1).single());
+      setting = { ...setting, maintenance_mode: false, global_audio_enabled: true, safe_mode: false };
+    }
     if (settingError) throw settingError;
-    const { data: activeCase, error: caseError } = await client.from("cases").select("slug").eq("id", setting.active_case_id).eq("is_enabled", true).single();
+    if (setting.maintenance_mode) {
+      status.querySelector("h1").textContent = "Website đang tạm nghỉ một chút";
+      status.querySelector("p").textContent = "Hãy quay lại sau nha.";
+      return;
+    }
+    const { data: activeCase, error: caseError } = await client.from("cases").select("id,slug").eq("id", setting.active_case_id).eq("is_enabled", true).single();
     if (caseError || !activeCase) throw caseError || new Error("Hồ sơ không tồn tại");
     if (!/^case-00[12]$/.test(activeCase.slug)) throw new Error("Hồ sơ chưa có giao diện hợp lệ");
-    frame.addEventListener("load", () => { status.hidden = true; frame.hidden = false; }, { once: true });
+    frame.addEventListener("load", () => {
+      status.hidden = true; frame.hidden = false;
+      frame.contentWindow?.postMessage({ type: "sorry-site:settings", globalAudioEnabled: setting.global_audio_enabled, safeMode: setting.safe_mode }, location.origin);
+      if (enhanced) client.rpc("record_case_view", { p_case_id: activeCase.id, p_session_id: getAnonymousSessionId(), p_device_type: matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop" }).then(({ error }) => {
+        if (error && error.code !== "PGRST202") console.info("Không thể ghi nhận lượt mở:", error.message);
+      }).catch(() => undefined);
+    }, { once: true });
     frame.src = `cases/${activeCase.slug}.html`;
   } catch (error) {
     console.error("Không tải được hồ sơ công khai:", error);
