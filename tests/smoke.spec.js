@@ -19,7 +19,7 @@ async function instrumentAudio(page) {
   });
 }
 
-test("public Supabase selection preserves active case 001", async ({ page }) => {
+test("public Supabase selection loads the active case", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
