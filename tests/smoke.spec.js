@@ -1,11 +1,15 @@
 const { test, expect } = require("@playwright/test");
 
-test("public fallback preserves case 001", async ({ page }) => {
+test("public Supabase selection preserves active case 001", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
   await page.goto("http://127.0.0.1:8766/");
   const frame = page.frameLocator("#case-frame");
-  await expect(frame.locator("#intro")).toBeVisible();
+  await expect(frame.locator("#intro")).toBeVisible({ timeout: 15000 });
   await expect(frame.locator("#confetti")).toBeAttached();
   await expect(frame.locator("#progress")).toBeAttached();
+  expect(errors).toEqual([]);
 });
 
 test("case 002 interaction and accessible modal", async ({ page }) => {
@@ -32,9 +36,8 @@ test("case 002 mobile does not overflow", async ({ page }) => {
   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client + 1);
 });
 
-test("admin stays hidden without Supabase configuration", async ({ page }) => {
+test("admin dashboard stays hidden without a session", async ({ page }) => {
   await page.goto("http://127.0.0.1:8766/admin.html");
   await expect(page.locator("#login-panel")).toBeVisible();
   await expect(page.locator("#dashboard")).toBeHidden();
-  await expect(page.locator("#login-message")).toContainText("chưa được cấu hình");
 });
