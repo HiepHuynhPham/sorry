@@ -64,3 +64,20 @@ Không force-push. Xem lịch sử bằng `git log --oneline`, sau đó dùng `g
 - Anon key được phép xuất hiện ở frontend nhưng phải đi cùng RLS.
 - Không dùng query string để chọn case và không dùng localStorage như một cờ quyền admin.
 - Nội dung HTML của case là asset tĩnh trên GitHub Pages; không đặt thông tin bí mật trong bất kỳ case nào.
+
+## Hệ thống âm thanh
+
+Âm thanh phía public được tổng hợp hoàn toàn bằng Web Audio API trong `assets/js/audio-manager.js`; dự án không tải file nhạc, không dùng CDN âm thanh và không sao chép giai điệu có bản quyền. `assets/js/case-audio.js` nối Audio Manager với các nút của từng hồ sơ. Trang admin không import hai module này nên không phát âm thanh.
+
+- Khi trang vừa tải, AudioContext chưa được tạo và không có âm thanh.
+- Nút mở hồ sơ là thao tác mở khóa âm thanh, phát hiệu ứng mở rồi fade-in nhạc riêng của case.
+- Case 001 dùng âm sắc music-box/marimba nhẹ; case 002 dùng piano/chuông và tick-tock nhỏ.
+- Hiệu ứng né nút có giới hạn 250 ms. Hiệu ứng tha lỗi tự duck nhạc nền rồi trả lại âm lượng.
+- Nút âm thanh cố định xuất hiện sau khi mở hồ sơ. Trạng thái tắt, âm lượng nhạc và âm lượng hiệu ứng dùng namespace `sorry-site.audio.*` trong localStorage; chúng không liên quan xác thực admin.
+- Khi tab bị ẩn, nhạc fade-out và AudioContext tạm dừng. Khi quay lại, nhạc chỉ tiếp tục nếu người xem chưa tắt.
+
+Âm lượng mặc định nằm trong constructor của `AudioManager`: `musicVolume = 0.18` và `effectVolume = 0.34`. Có thể đổi bằng `setMusicVolume()` và `setEffectVolume()`. Muốn thêm case mới, thêm motif trong `scheduleMusicLoop()`, hiệu ứng thích hợp trong các hàm `play*Effect`, rồi đặt `data-case` và nạp `case-audio.js` ở HTML của case.
+
+Nếu sau này thay bằng file local, đặt file tự tạo hoặc có giấy phép rõ ràng trong `assets/audio/`, ghi nguồn/giấy phép tại đây và giữ fallback để giao diện không phụ thuộc file. Không sử dụng nhạc có bản quyền khi chưa được phép.
+
+Để vô hiệu hóa toàn bộ hệ thống khi xử lý sự cố, bỏ thẻ `case-audio.js` và `audio-control.css` khỏi hai trang case; nội dung, animation và các nút vẫn hoạt động độc lập.

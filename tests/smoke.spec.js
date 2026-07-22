@@ -1,5 +1,24 @@
 const { test, expect } = require("@playwright/test");
 
+async function instrumentAudio(page) {
+  await page.addInitScript(() => {
+    window.__audioTest = { contexts: 0, oscillators: 0 };
+    const NativeContext = window.AudioContext || window.webkitAudioContext;
+    if (!NativeContext) return;
+    class TrackedContext extends NativeContext {
+      constructor(...args) { super(...args); window.__audioTest.contexts += 1; }
+      createOscillator() {
+        const oscillator = super.createOscillator();
+        const start = oscillator.start.bind(oscillator);
+        oscillator.start = (...args) => { window.__audioTest.oscillators += 1; return start(...args); };
+        return oscillator;
+      }
+    }
+    window.AudioContext = TrackedContext;
+    window.webkitAudioContext = TrackedContext;
+  });
+}
+
 test("public Supabase selection preserves active case 001", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -36,8 +55,57 @@ test("case 002 mobile does not overflow", async ({ page }) => {
   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client + 1);
 });
 
+test("audio starts only after opening case 001 and can be muted", async ({ page }) => {
+  await instrumentAudio(page);
+  await page.goto("http://127.0.0.1:8766/cases/case-001.html");
+  expect(await page.evaluate(() => window.__audioTest)).toEqual({ contexts: 0, oscillators: 0 });
+  await page.locator("#openBtn").click();
+  await expect.poll(() => page.evaluate(() => window.__audioTest.oscillators)).toBeGreaterThan(0);
+  const control = page.locator(".audio-control");
+  await expect(control).toBeVisible();
+  await expect(control).toHaveAttribute("aria-pressed", "true");
+  await control.click();
+  await expect(control).toHaveAttribute("aria-pressed", "false");
+  expect(await page.evaluate(() => localStorage.getItem("sorry-site.audio.muted"))).toBe("true");
+});
+
+test("remembered mute prevents case 002 notes", async ({ page }) => {
+  await instrumentAudio(page);
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  await page.evaluate(() => localStorage.setItem("sorry-site.audio.muted", "true"));
+  await page.reload();
+  await page.locator("#open-case").click();
+  await page.waitForTimeout(500);
+  expect(await page.evaluate(() => window.__audioTest.oscillators)).toBe(0);
+  await expect(page.locator(".audio-control")).toHaveAttribute("aria-pressed", "false");
+});
+
+test("case 002 starts its audio after the open gesture", async ({ page }) => {
+  await instrumentAudio(page);
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  expect(await page.evaluate(() => window.__audioTest.oscillators)).toBe(0);
+  await page.locator("#open-case").click();
+  await expect.poll(() => page.evaluate(() => window.__audioTest.oscillators)).toBeGreaterThan(0);
+});
+
+test("case remains usable when Web Audio is unavailable", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "AudioContext", { configurable: true, value: undefined });
+    Object.defineProperty(window, "webkitAudioContext", { configurable: true, value: undefined });
+  });
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("http://127.0.0.1:8766/cases/case-002.html");
+  await page.locator("#open-case").click();
+  await expect(page.locator("#intro")).toHaveClass(/hide/);
+  await expect(page.locator(".audio-control")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test("admin dashboard stays hidden without a session", async ({ page }) => {
+  await instrumentAudio(page);
   await page.goto("http://127.0.0.1:8766/admin.html");
   await expect(page.locator("#login-panel")).toBeVisible();
   await expect(page.locator("#dashboard")).toBeHidden();
+  expect(await page.evaluate(() => window.__audioTest.contexts)).toBe(0);
 });
