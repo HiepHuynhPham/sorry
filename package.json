@@ -1,0 +1,6 @@
+{
+  "name": "sorry-case-files",
+  "private": true,
+  "scripts": { "test": "playwright test tests/smoke.spec.js" },
+  "devDependencies": { "@playwright/test": "1.61.1" }
+}
