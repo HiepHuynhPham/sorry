@@ -10,6 +10,19 @@ const forgiveButton = document.querySelector(selectors.forgive);
 let dodgeCount = 0;
 
 audioManager.initialize();
+const configuredAudio = window.CASE_AUDIO_SETTINGS;
+if (configuredAudio && typeof configuredAudio === "object") {
+  const requestedVolume = configuredAudio.music_volume ?? configuredAudio.volume;
+  if (Number.isFinite(Number(requestedVolume))) {
+    const volume = Math.max(0, Math.min(1, Number(requestedVolume)));
+    audioManager.setMusicVolume(volume);
+    const effectVolume = Number.isFinite(Number(configuredAudio.effect_volume))
+      ? Math.max(0, Math.min(1, Number(configuredAudio.effect_volume)))
+      : Math.min(1, volume * 1.5);
+    audioManager.setEffectVolume(effectVolume);
+  }
+  if (configuredAudio.enabled === false) audioManager.setGlobalEnabled(false);
+}
 
 const control = document.createElement("button");
 control.type = "button";

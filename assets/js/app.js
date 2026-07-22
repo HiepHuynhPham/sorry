@@ -32,7 +32,7 @@ async function loadActiveCase() {
     }
     const { data: activeCase, error: caseError } = await client.from("cases").select("id,slug").eq("id", setting.active_case_id).eq("is_enabled", true).single();
     if (caseError || !activeCase) throw caseError || new Error("Hồ sơ không tồn tại");
-    if (!/^case-00[12]$/.test(activeCase.slug)) throw new Error("Hồ sơ chưa có giao diện hợp lệ");
+    if (!/^case-\d{3}$/.test(activeCase.slug)) throw new Error("Hồ sơ chưa có giao diện hợp lệ");
     frame.addEventListener("load", () => {
       status.hidden = true; frame.hidden = false;
       frame.contentWindow?.postMessage({ type: "sorry-site:settings", globalAudioEnabled: setting.global_audio_enabled, safeMode: setting.safe_mode }, location.origin);
@@ -40,7 +40,9 @@ async function loadActiveCase() {
         if (error && error.code !== "PGRST202") console.info("Không thể ghi nhận lượt mở:", error.message);
       }).catch(() => undefined);
     }, { once: true });
-    frame.src = `cases/${activeCase.slug}.html?v=20260722-5`;
+    frame.src = /^case-00[12]$/.test(activeCase.slug)
+      ? `cases/${activeCase.slug}.html?v=20260722-6`
+      : `cases/case-dynamic.html?id=${encodeURIComponent(activeCase.id)}&v=20260722-6`;
   } catch (error) {
     console.error("Không tải được hồ sơ công khai:", error);
     showError("Có một nhịp bị lỡ. Bạn thử lại sau một chút nha.");
