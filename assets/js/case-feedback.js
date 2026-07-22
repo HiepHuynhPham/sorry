@@ -33,7 +33,6 @@ if (decision) {
     send.disabled = true; send.textContent = "Đang gửi…"; const originalMessage = textarea.value;
     try {
       const client = await getClient(); if (!client) throw new Error("not_configured");
-      if (window.APP_CONFIG?.ADMIN_CENTER_MIGRATION_READY !== true) throw new Error("migration_not_ready");
       const { data: activeCase, error: caseError } = await client.from("cases").select("id").eq("slug", caseSlug).single();
       if (caseError) throw caseError;
       const { error } = await client.rpc("submit_case_response", { p_case_id: activeCase.id, p_response_type: selectedType, p_message: originalMessage.trim() || null, p_session_id: getAnonymousSessionId() });

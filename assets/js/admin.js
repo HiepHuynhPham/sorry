@@ -4,7 +4,7 @@ const client = await getClient();
 const $ = (selector) => document.querySelector(selector);
 const loginPanel = $("#login-panel"), dashboard = $("#dashboard"), loginMessage = $("#login-message"), adminMessage = $("#admin-message");
 const dialog = $("#confirm"), confirmText = $("#confirm-text"), confirmTitle = $("#confirm-title"), confirmAction = $("#confirm-action");
-let cases = [], responses = [], views = [], settings = null, migrationReady = window.APP_CONFIG?.ADMIN_CENTER_MIGRATION_READY === true, pendingAction = null;
+let cases = [], responses = [], views = [], settings = null, migrationReady = false, pendingAction = null;
 const labels = { draft:"Bản nháp",published:"Đang công khai",reconciled:"Đã hòa giải",archived:"Đã lưu trữ",forgiven:"Hết giận",still_angry:"Còn giận",need_time:"Cần thêm thời gian",food:"Đền bằng đồ ăn" };
 
 function setMessage(text, isError=false){ adminMessage.textContent=text; adminMessage.style.color=isError?"#a11d3f":"#276342"; }
@@ -14,7 +14,9 @@ function formatDate(value){ return value ? new Intl.DateTimeFormat("vi-VN",{date
 function ask(title,text,action){ confirmTitle.textContent=title;confirmText.textContent=text;pendingAction=action;dialog.showModal(); }
 
 async function loadData(){
-  setMessage("Đang tải dữ liệu…"); migrationReady=window.APP_CONFIG?.ADMIN_CENTER_MIGRATION_READY === true;
+  setMessage("Đang tải dữ liệu…");
+  const migrationCheck=await client.rpc("get_public_site_state");
+  migrationReady=!migrationCheck.error;
   let caseResult=migrationReady?await client.from("cases").select("id,slug,case_number,title,recipient_display_name,short_description,status,visibility,audio_settings,created_at,updated_at,is_enabled,dodge_limit").order("case_number"):await client.from("cases").select("id,slug,case_number,title,short_description,created_at,updated_at,is_enabled").order("case_number");
   if(caseResult.error&&migrationReady){ migrationReady=false; caseResult=await client.from("cases").select("id,slug,case_number,title,short_description,created_at,updated_at,is_enabled").order("case_number"); }
   if(caseResult.error) throw caseResult.error;
@@ -59,7 +61,7 @@ async function renderHistory(){const container=$("#history-list");if(!migrationR
 function renderSettings(){ $("#maintenance-mode").checked=settings.maintenance_mode;$("#global-audio").checked=settings.global_audio_enabled;$("#safe-mode").checked=settings.safe_mode; }
 function renderAll(){renderSummary();renderCases();renderResponses();renderSettings()}
 
-async function publishCase(id){let error;if(migrationReady)({error}=await client.rpc("publish_case",{p_case_id:id}));else ({error}=await client.from("site_settings").update({active_case_id:id}).eq("id",1));if(error)return setMessage("Không thể công khai hồ sơ: "+error.message,true);setMessage("Đã đổi hồ sơ công khai.");await loadData()}
+async function publishCase(id){if(!migrationReady)return setMessage("Không thể đổi hồ sơ trong chế độ tương thích. Hãy kiểm tra migration 002.",true);const {error}=await client.rpc("publish_case",{p_case_id:id});if(error)return setMessage("Không thể công khai hồ sơ: "+error.message,true);setMessage("Đã đổi hồ sơ công khai.");await loadData()}
 async function archiveCase(id){const {error}=await client.from("cases").update({status:"archived",visibility:"admin_only"}).eq("id",id);if(error)return setMessage("Không thể lưu trữ hồ sơ.",true);await loadData()}
 async function markRead(id){const {error}=await client.from("case_responses").update({is_read:true}).eq("id",id);if(error)return setMessage("Không thể cập nhật phản hồi.",true);const item=responses.find(r=>r.id===id);if(item)item.is_read=true;renderSummary();renderResponses()}
 async function saveSettings(){if(!migrationReady)return setMessage("Hãy chạy migration 002 trước khi dùng công cụ khẩn cấp.",true);const patch={maintenance_mode:$("#maintenance-mode").checked,global_audio_enabled:$("#global-audio").checked,safe_mode:$("#safe-mode").checked};const {error}=await client.from("site_settings").update(patch).eq("id",1);if(error)return setMessage("Không thể lưu cài đặt.",true);settings={...settings,...patch};setMessage("Đã lưu cài đặt an toàn.")}

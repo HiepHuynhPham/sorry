@@ -22,13 +22,8 @@ async function loadActiveCase() {
     return;
   }
   try {
-    const enhanced = window.APP_CONFIG?.ADMIN_CENTER_MIGRATION_READY === true;
-    let setting, settingError;
-    if (enhanced) ({ data: setting, error: settingError } = await client.rpc("get_public_site_state").single());
-    else {
-      ({ data: setting, error: settingError } = await client.from("site_settings").select("active_case_id").eq("id", 1).single());
-      setting = { ...setting, maintenance_mode: false, global_audio_enabled: true, safe_mode: false };
-    }
+    const enhanced = true;
+    const { data: setting, error: settingError } = await client.rpc("get_public_site_state").single();
     if (settingError) throw settingError;
     if (setting.maintenance_mode) {
       status.querySelector("h1").textContent = "Website đang tạm nghỉ một chút";
